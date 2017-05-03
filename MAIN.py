@@ -25,6 +25,8 @@ LGREY = (240,240,240)
 #fonts
 tfont = pygame.font.SysFont("Century Gothic",80,False,False)
 stfont = pygame.font.SysFont("Century Gothic",70,False,False)
+ssfont = pygame.font.SysFont("Century Gothic",50,False,False)
+pfont = pygame.font.SysFont("//Library//Fonts//Microsoft//MS Gothic.ttf",20,False,False)
 #initializing things
 background = pygame.image.load("maxresdefault.jpg")
 pressed = False
@@ -42,8 +44,22 @@ def buttons(word,font,x,y,w,h,c1,c2,mpos):
 		if pressed[0] == 1:
 			push = True
 	word = font.render(word,True,BLACK)
-	screen.blit(word,(x+20,y+15))
+	if font == stfont:
+		screen.blit(word,(x+20,y+15))
+	elif font == ssfont:
+		screen.blit(word,(x+10,y+5))
 	return push
+
+# instructions()
+# @param: none
+# @return: none
+def instructions():
+	screen.fill(LLBLUE)
+	line1 = pfont.render("Welcome to Maze Daze 2.0!")
+	screen.blit(line1,(300,300))
+	buttons("PLAY",ssfont,250,650,200,80,LBLUE,LLBLUE,mpos)
+	buttons("TITLE",ssfont,550,650,200,80,LBLUE,LLBLUE,mpos)
+	
 
 #title()
 #@param: none
