@@ -63,7 +63,7 @@ def vline(x,y,l,colour):
 # hline()
 # @param:x:int,y:int,l:int,colour:int()
 # @return:none
-def hline():
+def hline(x,y,l,colour):
 	pygame.draw.rect(screen,colour,(x,y,l,2),0)
 
 # level_1()
@@ -92,15 +92,17 @@ def level_1():
 	hline(630,267,63,DBLUE)
 	hline(643,66,63,DBLUE)
 	hline(643,334,63,DBLUE)
-	hline(756,468,DBLUE)
+	hline(756,468,63,DBLUE)
 	hline(819,66,63,DBLUE)
 	hline(819,401,126,DBLUE)
 	hline(882,267,126,DBLUE)
+	#updating
+	pygame.display.update()
 
-# play()
+# start()
 # @param: none
 # @return: none
-def play():
+def start():
 	level_1()
 	pass
 
@@ -113,6 +115,8 @@ def instructions():
 	screen.blit(line1,(300,300))
 	buttons("PLAY",ssfont,250,650,200,80,LBLUE,LLBLUE,mpos)
 	buttons("TITLE",ssfont,550,650,200,80,LBLUE,LLBLUE,mpos)
+	#updating
+	pygame.display.update()
 
 #title()
 #@param: none
@@ -122,9 +126,10 @@ def title(mpos):
 	play = buttons("START",stfont,400,470,200,80,LBLUE,LLBLUE,mpos)
 	instruc = buttons("INSTRUCTIONS",stfont,300,640,400,80,LBLUE,LLBLUE,mpos)
 	#updating
-	pygame.display.update()	
+	pygame.display.update()
+	#button pressed
 	if play == True:
-		play()
+		start()
 	if instruc == True:
 		instructions()
 
