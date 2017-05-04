@@ -66,38 +66,48 @@ def vline(x,y,l,colour):
 def hline(x,y,l,colour):
 	pygame.draw.rect(screen,colour,(x,y,l,2),0)
 
+
+	
 # level_1()
 # @param: none
 # @return: borders:int[]
 def level_1():
-	screen.fill(LLBLUE)
-	pygame.draw.rect(screen,DBLUE,(0,0,WIDTH,HEIGHT),7)
-	#left to right, top to bottom
-	vline(944,0,201,DBLUE)
-	vline(944,335,67,DBLUE)
-	vline(881,67,268,DBLUE)
-	vline(881,402,67,DBLUE)
-	vline(818,134,268,DBLUE)
-	vline(755,67,67,DBLUE)
-	vline(755,202,268,DBLUE)
-	vline(692,134,134,DBLUE)
-	vline(692,335,134,DBLUE)
-	vline(629,0,67,DBLUE)
-	vline(629,268,268,DBLUE)
-	#right to left, top to bottom
-	hline(567,66,63,DBLUE)
-	hline(567,201,63,DBLUE)
-	hline(567,401,63,DBLUE)
-	hline(630,133,189,DBLUE)
-	hline(630,267,63,DBLUE)
-	hline(693,66,63,DBLUE)
-	hline(693,334,63,DBLUE)
-	hline(756,468,63,DBLUE)
-	hline(819,66,63,DBLUE)
-	hline(819,401,126,DBLUE)
-	hline(882,267,126,DBLUE)
-	#updating
-	pygame.display.update()
+	playing = True
+	while playing:
+		screen.fill(LLBLUE)
+		pygame.draw.rect(screen,DBLUE,(0,0,WIDTH,HEIGHT),7)
+		
+		#left to right, top to bottom
+		vline(944,0,201,DBLUE)
+		vline(944,335,67,DBLUE)
+		vline(881,67,268,DBLUE)
+		vline(881,402,67,DBLUE)
+		vline(818,134,268,DBLUE)
+		vline(755,67,67,DBLUE)
+		vline(755,202,268,DBLUE)
+		vline(692,134,134,DBLUE)
+		vline(692,335,134,DBLUE)
+		vline(629,0,67,DBLUE)
+		vline(629,268,268,DBLUE)
+		#right to left, top to bottom
+		hline(567,66,63,DBLUE)
+		hline(567,201,63,DBLUE)
+		hline(567,401,63,DBLUE)
+		hline(630,133,189,DBLUE)
+		hline(630,267,63,DBLUE)
+		hline(693,66,63,DBLUE)
+		hline(693,334,63,DBLUE)
+		hline(756,468,63,DBLUE)
+		hline(819,66,63,DBLUE)
+		hline(819,401,126,DBLUE)
+		hline(882,267,126,DBLUE)
+		
+		pause = buttons("PAUSE",ssfont,950,750,40,40,BLACK,WHITE,mpos)
+		#updating
+		pygame.display.update()
+		if pause == True:
+			playing = False
+		
 
 # start()
 # @param: none
@@ -132,7 +142,8 @@ def title(mpos):
 	pygame.display.update()
 	#button pressed
 	if play == True:
-		start()
+		
+			start()
 	if instruc == True:
 		instructions()
 
@@ -180,7 +191,6 @@ while inPlay:
 	if (y+d)>=(HEIGHT+1):
 		y = HEIGHT
 
-	title(mpos)                     # the screen window must be constantly redrawn - animation
-	pygame.time.delay(2)                # pause for 2 miliseconds
-#---------------------------------------#                                        
-pygame.quit()                           # always quit pygame when done!
+	title(mpos)
+	pygame.time.delay(2)
+pygame.quit()
