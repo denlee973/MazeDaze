@@ -73,40 +73,35 @@ def hline(x,y,l,colour):
 # @return: borders:int[]
 def level_1():
 	playing = True
-	while playing:
-		screen.fill(LLBLUE)
-		pygame.draw.rect(screen,DBLUE,(0,0,WIDTH,HEIGHT),7)
-		
-		#left to right, top to bottom
-		vline(944,0,201,DBLUE)
-		vline(944,335,67,DBLUE)
-		vline(881,67,268,DBLUE)
-		vline(881,402,67,DBLUE)
-		vline(818,134,268,DBLUE)
-		vline(755,67,67,DBLUE)
-		vline(755,202,268,DBLUE)
-		vline(692,134,134,DBLUE)
-		vline(692,335,134,DBLUE)
-		vline(629,0,67,DBLUE)
-		vline(629,268,268,DBLUE)
-		#right to left, top to bottom
-		hline(567,66,63,DBLUE)
-		hline(567,201,63,DBLUE)
-		hline(567,401,63,DBLUE)
-		hline(630,133,189,DBLUE)
-		hline(630,267,63,DBLUE)
-		hline(693,66,63,DBLUE)
-		hline(693,334,63,DBLUE)
-		hline(756,468,63,DBLUE)
-		hline(819,66,63,DBLUE)
-		hline(819,401,126,DBLUE)
-		hline(882,267,126,DBLUE)
-		
-		pause = buttons("PAUSE",ssfont,950,750,40,40,BLACK,WHITE,mpos)
-		#updating
-		pygame.display.update()
-		if pause == True:
-			playing = False
+	
+	screen.fill(LLBLUE)
+	pygame.draw.rect(screen,DBLUE,(0,0,WIDTH,HEIGHT),7)
+	
+	#left to right, top to bottom
+	vline(944,0,201,DBLUE)
+	vline(944,335,67,DBLUE)
+	vline(881,67,268,DBLUE)
+	vline(881,402,67,DBLUE)
+	vline(818,134,268,DBLUE)
+	vline(755,67,67,DBLUE)
+	vline(755,202,268,DBLUE)
+	vline(692,134,134,DBLUE)
+	vline(692,335,134,DBLUE)
+	vline(629,0,67,DBLUE)
+	vline(629,268,268,DBLUE)
+	#right to left, top to bottom
+	hline(567,66,63,DBLUE)
+	hline(567,201,63,DBLUE)
+	hline(567,401,63,DBLUE)
+	hline(630,133,189,DBLUE)
+	hline(630,267,63,DBLUE)
+	hline(693,66,63,DBLUE)
+	hline(693,334,63,DBLUE)
+	hline(756,468,63,DBLUE)
+	hline(819,66,63,DBLUE)
+	hline(819,401,126,DBLUE)
+	hline(882,267,126,DBLUE)
+
 		
 
 # start()
@@ -114,8 +109,12 @@ def level_1():
 # @return: none
 def start():
 	level_1()
-	pass
-
+	while playing:
+		pause = buttons("PAUSE",ssfont,950,750,40,40,BLACK,WHITE,mpos)
+		#updating
+		pygame.display.update()
+		if pause == True:
+			playing = False
 # instructions()
 # @param: none
 # @return: none
@@ -135,15 +134,14 @@ def title(mpos):
 	screen.blit(background,[0,0])
 	pygame.draw.rect(screen,WHITE,(0,300,1000,100),0)
 	title = tfont.render("MAZE DAZE 2.0",True,BLACK)
-	screen.blit(title,(400,310))
+	screen.blit(title,(300,320))
 	play = buttons("START",stfont,400,470,200,80,LBLUE,LLBLUE,mpos)
 	instruc = buttons("INSTRUCTIONS",stfont,300,640,400,80,LBLUE,LLBLUE,mpos)
 	#updating
 	pygame.display.update()
 	#button pressed
 	if play == True:
-		
-			start()
+		start()
 	if instruc == True:
 		instructions()
 
