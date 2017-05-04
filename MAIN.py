@@ -90,8 +90,8 @@ def level_1():
 	hline(567,401,63,DBLUE)
 	hline(630,133,189,DBLUE)
 	hline(630,267,63,DBLUE)
-	hline(643,66,63,DBLUE)
-	hline(643,334,63,DBLUE)
+	hline(693,66,63,DBLUE)
+	hline(693,334,63,DBLUE)
 	hline(756,468,63,DBLUE)
 	hline(819,66,63,DBLUE)
 	hline(819,401,126,DBLUE)
@@ -111,7 +111,7 @@ def start():
 # @return: none
 def instructions():
 	screen.fill(LLBLUE)
-	line1 = pfont.render("Welcome to Maze Daze 2.0!")
+	line1 = pfont.render("Welcome to Maze Daze 2.0!",True,BLACK)
 	screen.blit(line1,(300,300))
 	buttons("PLAY",ssfont,250,650,200,80,LBLUE,LLBLUE,mpos)
 	buttons("TITLE",ssfont,550,650,200,80,LBLUE,LLBLUE,mpos)
