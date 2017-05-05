@@ -98,8 +98,6 @@ def instructions():
 #title()
 #@param: none
 #@return: none
-window = 0
-
 def title(mpos):
 	screen.blit(background,[0,0])
 	play = buttons("START",stfont,400,470,200,80,LBLUE,LLBLUE,mpos)
@@ -111,63 +109,68 @@ def title(mpos):
 
 
 
+
+window = 0
 inPlay = True
-print "Hit ESC to end the program."
+def main():
+	print "Hit ESC to end the program."
+
+	while inPlay:
+	    #deals with any keyboard options once program is run
+	    #looks for the event (action of using keyboard)
+		if window == 0 or window == 2:
+			for event in pygame.event.get():
+				if event.type == pygame.MOUSEBUTTONDOWN:
+					print "PRESSED"
+					pressed = True
+				if event.type == pygame.MOUSEMOTION:
+					mpos = pygame.mouse.get_pos()
+					print "Mouse position:",mpos
+				if event.type == pygame.MOUSEBUTTONUP:
+					print "RELEASED"
+					pressed = False
+		    #looks for escape to be pressed
+				if event.type == pygame.KEYDOWN:
+					if event.key==pygame.K_ESCAPE:
+						inPlay = False  
+	    # get_pressed() method generates a True/False list for the status of all keys
+		elif window == 1:
+			keys = pygame.key.get_pressed()    
+			if keys[pygame.K_LEFT]:
+				x -= spdx
+			if keys[pygame.K_RIGHT]:
+				x += spdx
+			if keys[pygame.K_UP]:
+				y -= spdy
+			if keys[pygame.K_DOWN]:
+				y += spdy
+			if x<=0:
+				x = 0
+			if (x+d)>=(WIDTH+1):
+				x = WIDTH
+			if y<=0:
+				y = 0
+			if (y+d)>=(HEIGHT+1):
+				y = HEIGHT
+			if keys[pygame.K_ESCAPE]:
+				inPlay = False
+
+		play,instruc = title(mpos)                     # the screen window must be constantly redrawn - animation
+		if window==0 and play==True:
+			window=window+1
+			level_1()
+		if window==1:
+			level_1()
 
 
-while inPlay:
+		if window==0 and instruc == True:
+			window = 2
+			instructions()
+		if window == 2:
+			instructions()
+		pygame.time.delay(2)                # pause for 2 miliseconds
 
-	
-
-	
-    #deals with any keyboard options once program is run
-    #looks for the event (action of using keyboard)
-	for event in pygame.event.get():
-		if event.type == pygame.MOUSEBUTTONDOWN:
-			print "PRESSED"
-			pressed = True
-		if event.type == pygame.MOUSEMOTION:
-			mpos = pygame.mouse.get_pos()
-			print "Mouse position:",mpos
-		if event.type == pygame.MOUSEBUTTONUP:
-			print "RELEASED"
-			pressed = False
-    #looks for escape to be pressed
-		if event.type == pygame.KEYDOWN:
-			if event.key==pygame.K_ESCAPE:
-				inPlay = False  
-    # get_pressed() method generates a True/False list for the status of all keys
-	keys = pygame.key.get_pressed()    
-	if keys[pygame.K_LEFT]:
-		x -= spdx
-	if keys[pygame.K_RIGHT]:
-		x += spdx
-	if keys[pygame.K_UP]:
-		y -= spdy
-	if keys[pygame.K_DOWN]:
-		y += spdy
-	if x<=0:
-		x = 0
-	if (x+d)>=(WIDTH+1):
-		x = WIDTH
-	if y<=0:
-		y = 0
-	if (y+d)>=(HEIGHT+1):
-		y = HEIGHT
-
-	play,instruc = title(mpos)                     # the screen window must be constantly redrawn - animation
-	if window==0 and play==True:
-		window=window+1
-		level_1()
-	if window==1:
-		level_1()
-
-	
-	if window==0 and instruc == True:
-		window = 2
-		instructions()
-	if window == 2:
-		instructions()
-	pygame.time.delay(2)                # pause for 2 miliseconds
+main()
 #---------------------------------------#                                        
 pygame.quit()                           # always quit pygame when done!
+quit()
