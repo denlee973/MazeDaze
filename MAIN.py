@@ -94,9 +94,6 @@ def move():
 	elif y+d+2>HEIGHT:
 		y = HEIGHT-d-2
 	
-		
-		
-		
 	pygame.draw.circle(screen,BLACK,(x,y,d),0)
 	
 
@@ -106,51 +103,9 @@ def move():
 def start():
 	level_1()
 	playing = True
-	while playing:
-			
-	    #deals with any keyboard options once program is run
-	    #looks for the event (action of using keyboard)
-		for event in pygame.event.get():
-			if event.type == pygame.MOUSEBUTTONDOWN:
-				print "PRESSED"
-				pressed = True
-			if event.type == pygame.MOUSEMOTION:
-				mpos = pygame.mouse.get_pos()
-				print "Mouse position:",mpos
-			if event.type == pygame.MOUSEBUTTONUP:
-				print "RELEASED"
-				pressed = False
-	    #looks for escape to be pressed
-			if event.type == pygame.KEYDOWN:
-				if event.key==pygame.K_ESCAPE:
-					playing = False  
-	    # get_pressed() method generates a True/False list for the status of all keys
-		keys = pygame.key.get_pressed()    
-		if keys[pygame.K_LEFT]:
-			x -= spdx
-		if keys[pygame.K_RIGHT]:
-			x += spdx
-		if keys[pygame.K_UP]:
-			y -= spdy
-		if keys[pygame.K_DOWN]:
-			y += spdy
-		if x<=0:
-			x = 0
-		if (x+d)>=(WIDTH+1):
-			x = WIDTH
-		if y<=0:
-			y = 0
-		if (y+d)>=(HEIGHT+1):
-			y = HEIGHT
 
-	
-		pygame.time.delay(2)
-		#pause = buttons("PAUSE",ssfont,950,750,40,40,BLACK,WHITE,mpos)
-		#updating
-		move()
-		pygame.display.update()
-		if pause == True:
-			playing = False
+	if pause == True:
+		playing = False
 # instructions()
 # @param: none
 # @return: none
@@ -160,14 +115,13 @@ def instructions():
 	screen.blit(line1,(300,300))
 	buttons("PLAY",ssfont,250,650,200,80,LBLUE,LLBLUE,mpos)
 	buttons("TITLE",ssfont,550,650,200,80,LBLUE,LLBLUE,mpos)
-	#updating
-	pygame.display.update()
 
 #title()
 #@param: none
-#@return: none
+#@return: clicked:str
 def title(mpos):
 	titleon = True
+	clicked = ""
 	while titleon:
 		screen.blit(background,[0,0])
 		pygame.draw.rect(screen,WHITE,(0,300,1000,100),0)
@@ -179,18 +133,65 @@ def title(mpos):
 		pygame.display.update()
 		#button pressed
 		if play == True:
-			start()
 			titleon = False
+			clicked = "play" 
 		if instruc == True:
-			instructions()
 			titleon = False
+			clicked = "instructions"
+	return clicked
+			
 			
 
 
 
 
 print "Hit ESC to end the program."
+def main():
 
+	while playing:
+		
+    #deals with any keyboard options once program is run
+    #looks for the event (action of using keyboard)
+	for event in pygame.event.get():
+		if event.type == pygame.MOUSEBUTTONDOWN:
+			print "PRESSED"
+			pressed = True
+		if event.type == pygame.MOUSEMOTION:
+			mpos = pygame.mouse.get_pos()
+			print "Mouse position:",mpos
+		if event.type == pygame.MOUSEBUTTONUP:
+			print "RELEASED"
+			pressed = False
+    #looks for escape to be pressed
+		if event.type == pygame.KEYDOWN:
+			if event.key==pygame.K_ESCAPE:
+				playing = False  
+    # get_pressed() method generates a True/False list for the status of all keys
+	keys = pygame.key.get_pressed()    
+	if keys[pygame.K_LEFT]:
+		x -= spdx
+	if keys[pygame.K_RIGHT]:
+		x += spdx
+	if keys[pygame.K_UP]:
+		y -= spdy
+	if keys[pygame.K_DOWN]:
+		y += spdy
+	if x<=0:
+		x = 0
+	if (x+d)>=(WIDTH+1):
+		x = WIDTH
+	if y<=0:
+		y = 0
+	if (y+d)>=(HEIGHT+1):
+		y = HEIGHT
 
-title(mpos)
+	pygame.time.delay(2)
+	#pause = buttons("PAUSE",ssfont,950,750,40,40,BLACK,WHITE,mpos)
+	clicked = title(mpos)
+	if clicked == "play":
+		start()
+	elif clicked == "instructions":
+		instructions()
+	pygame.display.update()
+	
 pygame.quit()
