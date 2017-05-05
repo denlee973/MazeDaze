@@ -32,7 +32,7 @@ pressed = False
 mpos = (0,0)
 x = 30
 y = 770
-d = 20
+d = 25
 spdx = 3
 spdy = 3
 
@@ -66,52 +66,88 @@ def vline(x,y,l,colour):
 def hline(x,y,l,colour):
 	pygame.draw.rect(screen,colour,(x,y,l,2),0)
 
-
-	
 # level_1()
 # @param: none
 # @return: borders:int[]
 def level_1():
-	playing = True
-	
 	screen.fill(LLBLUE)
 	pygame.draw.rect(screen,DBLUE,(0,0,WIDTH,HEIGHT),7)
-	
+	vertical = [[944,0,201],[944,335,67],[881,67,286],[881,402,67],[818,134,268],[755,67,67],[755,202,268],[692,134,134,],[692,335,134],[629,0,67],[629,268,268]]
+	horizontal = [[567,66,63],[567,201,63],[567,401,63],[630,133,189],[630,267,63],[693,66,63],[693,334,63],[756,468,63],[819,66,63],[819,401,126],[882,267,126]]
 	#left to right, top to bottom
-	vline(944,0,201,DBLUE)
-	vline(944,335,67,DBLUE)
-	vline(881,67,268,DBLUE)
-	vline(881,402,67,DBLUE)
-	vline(818,134,268,DBLUE)
-	vline(755,67,67,DBLUE)
-	vline(755,202,268,DBLUE)
-	vline(692,134,134,DBLUE)
-	vline(692,335,134,DBLUE)
-	vline(629,0,67,DBLUE)
-	vline(629,268,268,DBLUE)
+	for i in range(11):
+		vline(vertical[i][0],vertical[i][1],vertical[i][2],DBLUE)
 	#right to left, top to bottom
-	hline(567,66,63,DBLUE)
-	hline(567,201,63,DBLUE)
-	hline(567,401,63,DBLUE)
-	hline(630,133,189,DBLUE)
-	hline(630,267,63,DBLUE)
-	hline(693,66,63,DBLUE)
-	hline(693,334,63,DBLUE)
-	hline(756,468,63,DBLUE)
-	hline(819,66,63,DBLUE)
-	hline(819,401,126,DBLUE)
-	hline(882,267,126,DBLUE)
+	for k in range(11):
+		hline(horizontal[k][0],horizontal[k][1],horizontal[k][2],DBLUE)
 
+# move()
+# @param: borders:int[], stend:int[]
+# @return: coord:int[]
+def move():
+	if x-d-2<0:
+		x = d+2
+	elif x+d+2>WIDTH:
+		x = WIDTH-d-2
+	if y-d-2<0:
+		y = d+2
+	elif y+d+2>HEIGHT:
+		y = HEIGHT-d-2
+	
 		
+		
+		
+	pygame.draw.circle(screen,BLACK,(x,y,d),0)
+	
 
 # start()
 # @param: none
 # @return: none
 def start():
 	level_1()
+	playing = True
 	while playing:
-		pause = buttons("PAUSE",ssfont,950,750,40,40,BLACK,WHITE,mpos)
+			
+    #deals with any keyboard options once program is run
+    #looks for the event (action of using keyboard)
+	for event in pygame.event.get():
+		if event.type == pygame.MOUSEBUTTONDOWN:
+			print "PRESSED"
+			pressed = True
+		if event.type == pygame.MOUSEMOTION:
+			mpos = pygame.mouse.get_pos()
+			print "Mouse position:",mpos
+		if event.type == pygame.MOUSEBUTTONUP:
+			print "RELEASED"
+			pressed = False
+    #looks for escape to be pressed
+		if event.type == pygame.KEYDOWN:
+			if event.key==pygame.K_ESCAPE:
+				inPlay = False  
+    # get_pressed() method generates a True/False list for the status of all keys
+	keys = pygame.key.get_pressed()    
+	if keys[pygame.K_LEFT]:
+		x -= spdx
+	if keys[pygame.K_RIGHT]:
+		x += spdx
+	if keys[pygame.K_UP]:
+		y -= spdy
+	if keys[pygame.K_DOWN]:
+		y += spdy
+	if x<=0:
+		x = 0
+	if (x+d)>=(WIDTH+1):
+		x = WIDTH
+	if y<=0:
+		y = 0
+	if (y+d)>=(HEIGHT+1):
+		y = HEIGHT
+
+	
+	pygame.time.delay(2)
+		#pause = buttons("PAUSE",ssfont,950,750,40,40,BLACK,WHITE,mpos)
 		#updating
+		move()
 		pygame.display.update()
 		if pause == True:
 			playing = False
@@ -148,47 +184,9 @@ def title(mpos):
 
 
 
-inPlay = True
+
 print "Hit ESC to end the program."
 
 
-while inPlay:
-	
-    #deals with any keyboard options once program is run
-    #looks for the event (action of using keyboard)
-	for event in pygame.event.get():
-		if event.type == pygame.MOUSEBUTTONDOWN:
-			print "PRESSED"
-			pressed = True
-		if event.type == pygame.MOUSEMOTION:
-			mpos = pygame.mouse.get_pos()
-			print "Mouse position:",mpos
-		if event.type == pygame.MOUSEBUTTONUP:
-			print "RELEASED"
-			pressed = False
-    #looks for escape to be pressed
-		if event.type == pygame.KEYDOWN:
-			if event.key==pygame.K_ESCAPE:
-				inPlay = False  
-    # get_pressed() method generates a True/False list for the status of all keys
-	keys = pygame.key.get_pressed()    
-	if keys[pygame.K_LEFT]:
-		x -= spdx
-	if keys[pygame.K_RIGHT]:
-		x += spdx
-	if keys[pygame.K_UP]:
-		y -= spdy
-	if keys[pygame.K_DOWN]:
-		y += spdy
-	if x<=0:
-		x = 0
-	if (x+d)>=(WIDTH+1):
-		x = WIDTH
-	if y<=0:
-		y = 0
-	if (y+d)>=(HEIGHT+1):
-		y = HEIGHT
-
-	title(mpos)
-	pygame.time.delay(2)
+title(mpos)
 pygame.quit()
