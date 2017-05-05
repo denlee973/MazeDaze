@@ -72,39 +72,16 @@ def hline(x,y,l,colour):
 def level_1():
 	screen.fill(LLBLUE)
 	pygame.draw.rect(screen,DBLUE,(0,0,WIDTH,HEIGHT),7)
+	vertical = [[944,0,201],[944,335,67],[881,67,286],[881,402,67],[818,134,268],[755,67,67],[755,202,268],[692,134,134,],[692,335,134],[629,0,67],[629,268,268]]
+	horizontal = [[567,66,63],[567,201,63],[567,401,63],[630,133,189],[630,267,63],[693,66,63],[693,334,63],[756,468,63],[819,66,63],[819,401,126],[882,267,126]]
 	#left to right, top to bottom
-	vline(944,0,201,DBLUE)
-	vline(944,335,67,DBLUE)
-	vline(881,67,268,DBLUE)
-	vline(881,402,67,DBLUE)
-	vline(818,134,268,DBLUE)
-	vline(755,67,67,DBLUE)
-	vline(755,202,268,DBLUE)
-	vline(692,134,134,DBLUE)
-	vline(692,335,134,DBLUE)
-	vline(629,0,67,DBLUE)
-	vline(629,268,268,DBLUE)
+	for i in range(11):
+		vline(vertical[i][0],vertical[i][1],vertical[i][2],DBLUE)
 	#right to left, top to bottom
-	hline(567,66,63,DBLUE)
-	hline(567,201,63,DBLUE)
-	hline(567,401,63,DBLUE)
-	hline(630,133,189,DBLUE)
-	hline(630,267,63,DBLUE)
-	hline(693,66,63,DBLUE)
-	hline(693,334,63,DBLUE)
-	hline(756,468,63,DBLUE)
-	hline(819,66,63,DBLUE)
-	hline(819,401,126,DBLUE)
-	hline(882,267,126,DBLUE)
-	#updating
-	pygame.display.update()
+	for k in range(11):
+		hline(horizontal[k][0],horizontal[k][1],horizontal[k][2],DBLUE)
 
-# start()
-# @param: none
-# @return: none
-def start():
-	level_1()
-	pass
+
 
 # instructions()
 # @param: none
@@ -121,6 +98,8 @@ def instructions():
 #title()
 #@param: none
 #@return: none
+window = 0
+
 def title(mpos):
 	screen.blit(background,[0,0])
 	play = buttons("START",stfont,400,470,200,80,LBLUE,LLBLUE,mpos)
@@ -128,11 +107,7 @@ def title(mpos):
 	#updating
 	pygame.display.update()
 	#button pressed
-	if play == True:
-		start()
-	if instruc == True:
-		instructions()
-
+	return play,instruc
 
 
 
@@ -141,6 +116,9 @@ print "Hit ESC to end the program."
 
 
 while inPlay:
+
+	
+
 	
     #deals with any keyboard options once program is run
     #looks for the event (action of using keyboard)
@@ -177,7 +155,19 @@ while inPlay:
 	if (y+d)>=(HEIGHT+1):
 		y = HEIGHT
 
-	title(mpos)                     # the screen window must be constantly redrawn - animation
+	play,instruc = title(mpos)                     # the screen window must be constantly redrawn - animation
+	if window==0 and play==True:
+		window=window+1
+		level_1()
+	if window==1:
+		level_1()
+
+	
+	if window==0 and instruc == True:
+		window = 2
+		instructions()
+	if window == 2:
+		instructions()
 	pygame.time.delay(2)                # pause for 2 miliseconds
 #---------------------------------------#                                        
 pygame.quit()                           # always quit pygame when done!
