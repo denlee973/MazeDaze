@@ -58,9 +58,9 @@ def buttons(word,font,x,y,w,h,c1,c2,mpos):
 
 
 # move()
-# @param: borders:int[], stend:int[]
-# @return: coord:int[]
-def move():
+# @param: vertical:int[], horizontal:int[]
+# @return: none
+def move(vertical,horizontal):
 	global x
 	global y
 	if x-d-2<0:
@@ -89,7 +89,7 @@ def hline(x,y,l,colour):
 
 # level_1()
 # @param: none
-# @return: borders:int[]
+# @return: vertical:int[],horizontal:int[]
 def level_1():
 	screen.fill(LLBLUE)
 	pygame.draw.rect(screen,DBLUE,(0,0,WIDTH,HEIGHT),7)
@@ -101,6 +101,7 @@ def level_1():
 	#right to left, top to bottom
 	for k in range(11):
 		hline(horizontal[k][0],horizontal[k][1],horizontal[k][2],DBLUE)
+	return vertical,horizontal
 
 
 
@@ -161,20 +162,19 @@ def main():
 			if keys[pygame.K_LEFT]:
 				print "L"
 				x -= spdx
-			if keys[pygame.K_RIGHT]:
+			elif keys[pygame.K_RIGHT]:
 				print "R"
 				x += spdx
-			if keys[pygame.K_UP]:
+			elif keys[pygame.K_UP]:
 				print "U"
 				y -= spdy
-			if keys[pygame.K_DOWN]:
+			elif keys[pygame.K_DOWN]:
 				print "D"
 				y += spdy
 
 			if keys[pygame.K_ESCAPE]:
 				inPlay = False
-			print x
-			print y
+
 
 
 		if window==0:
@@ -186,8 +186,8 @@ def main():
 				window = 2
 				instructions()
 		if window==1:
-			level_1()
-			move()
+			vertical,horizontal = level_1()
+			move(vertical,horizontal)
 		if window == 2:
 			instructions()
 		#updating
