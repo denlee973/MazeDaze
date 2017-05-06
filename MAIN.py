@@ -58,9 +58,9 @@ def buttons(word,font,x,y,w,h,c1,c2,mpos):
 
 
 # move()
-# @param: vertical:int[], horizontal:int[]
+# @param: vertical:int[], horizontal:int[], directions:str
 # @return: none
-def move(vertical,horizontal):
+def move(vertical,horizontal,directions):
 	global x
 	global y
 	if x-d-2<0:
@@ -71,6 +71,22 @@ def move(vertical,horizontal):
 		y = d+2
 	elif y+d+2>HEIGHT:
 		y = HEIGHT-d-2
+		
+	for v in range(len(vertical)):
+		
+		if directions == "R" and x+d == vertical[v][0]:
+			if y-d<= vertical[v][1]+vertical[v][2] and y+d>=vertical[v][0]:
+				x = x+d
+		elif directions == "L" and x-d == vertical[v][0]+2:
+			if y-d<= vertical[v][1]+vertical[v][2] and y+d>=vertical[v][0]:
+				x = x-d
+	for h in range(len(horizontal)):
+		if directions == "D" and y+d == horizontal[h][1]:
+			if x+d<horizontal[h][0] and x-d>horizontal[h][0]+horizontal[h][2]:
+				y = y+d
+		elif directions == "U":
+			if y-d == horizontal[h][1] and x+d<horizontal[h][0] and x-d>horizontal[h][0]+horizontal[h][2]:
+				y = y-d
 	
 	pygame.draw.circle(screen,BLACK,(x,y),d,0)
 	pygame.draw.circle(screen,BGREY,(x,y),d-5,0)
@@ -158,18 +174,19 @@ def main():
 						inPlay = False  
 	    # get_pressed() method generates a True/False list for the status of all keys
 		elif window == 1:
+			directions = ""
 			keys = pygame.key.get_pressed()    
 			if keys[pygame.K_LEFT]:
-				print "L"
+				directions =  "L"
 				x -= spdx
 			elif keys[pygame.K_RIGHT]:
-				print "R"
+				directions =  "R"
 				x += spdx
 			elif keys[pygame.K_UP]:
-				print "U"
+				directions = "U"
 				y -= spdy
 			elif keys[pygame.K_DOWN]:
-				print "D"
+				directions = "D"
 				y += spdy
 
 			if keys[pygame.K_ESCAPE]:
@@ -187,7 +204,7 @@ def main():
 				instructions()
 		if window==1:
 			vertical,horizontal = level_1()
-			move(vertical,horizontal)
+			move(vertical,horizontal,directions)
 		if window == 2:
 			instructions()
 		#updating
