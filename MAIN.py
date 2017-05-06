@@ -75,18 +75,18 @@ def move(vertical,horizontal,directions):
 	for v in range(len(vertical)):
 		
 		if directions == "R" and x+d == vertical[v][0]:
-			if y-d<= vertical[v][1]+vertical[v][2] and y+d>=vertical[v][0]:
-				x = x+d
+			if y-d<= vertical[v][1]+vertical[v][2] and y+d>=vertical[v][0]:		#not running this if statement
+				x = vertical[v][0]-d
 		elif directions == "L" and x-d == vertical[v][0]+2:
 			if y-d<= vertical[v][1]+vertical[v][2] and y+d>=vertical[v][0]:
-				x = x-d
+				x = vertical[v][0]+d
 	for h in range(len(horizontal)):
 		if directions == "D" and y+d == horizontal[h][1]:
 			if x+d<horizontal[h][0] and x-d>horizontal[h][0]+horizontal[h][2]:
-				y = y+d
+				y = horizontal[h][1]-d
 		elif directions == "U":
 			if y-d == horizontal[h][1] and x+d<horizontal[h][0] and x-d>horizontal[h][0]+horizontal[h][2]:
-				y = y-d
+				y = horizontal[h][1]+d
 	
 	pygame.draw.circle(screen,BLACK,(x,y),d,0)
 	pygame.draw.circle(screen,BGREY,(x,y),d-5,0)
@@ -138,12 +138,13 @@ def instructions():
 #@return: none
 def title(mpos):
 	screen.blit(background,[0,0])
+	pygame.draw.rect(screen,WHITE,(0,300,1000,100),0)
+	title = tfont.render("MAZE DAZE 2.0",True,BLACK)
+	screen.blit(title,(400,310))
 	play = buttons("START",stfont,400,470,200,80,LBLUE,LLBLUE,mpos)
 	instruc = buttons("INSTRUCTIONS",stfont,300,640,400,80,LBLUE,LLBLUE,mpos)
 	#button pressed
 	return play,instruc
-
-
 
 
 
