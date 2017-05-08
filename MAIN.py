@@ -140,13 +140,11 @@ def title(mpos):
 	screen.blit(background,[0,0])
 	pygame.draw.rect(screen,WHITE,(0,300,1000,100),0)
 	title = tfont.render("MAZE DAZE 2.0",True,BLACK)
-	screen.blit(title,(400,310))
-	play = buttons("START",stfont,400,470,200,80,LBLUE,LLBLUE,mpos)
-	instruc = buttons("INSTRUCTIONS",stfont,300,640,400,80,LBLUE,LLBLUE,mpos)
+	screen.blit(title,(300,325))
+	play = buttons("START",stfont,410,500,200,80,LBLUE,LLBLUE,mpos)
+	instruc = buttons("INSTRUCTIONS",stfont,310,640,420,80,LBLUE,LLBLUE,mpos)
 	#button pressed
 	return play,instruc
-
-
 
 def main():
 	print "Hit ESC to end the program."
