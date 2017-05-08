@@ -198,9 +198,11 @@ def main():
 			if play==True:
 				window=1
 				level_1()
+				continue
 			if instruc == True:
 				window = 2
 				instructions()
+				continue
 		if window==1:
 			vertical,horizontal = level_1()
 			move(vertical,horizontal,directions)
