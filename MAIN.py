@@ -38,6 +38,8 @@ spdy = 1
 
 
 
+
+
 #buttons()
 #@param: word:str,font,x:int,y:int,w:int,h:int,c1:int(),c2:int()
 #@return: pressed:bool
@@ -153,6 +155,7 @@ def level_1():
 
 	return vertical,horizontal
 
+
 # instructions()
 # @param: none
 # @return: none
@@ -172,13 +175,13 @@ def title(mpos):
 	screen.blit(background,[0,0])
 	pygame.draw.rect(screen,WHITE,(0,300,1000,100),0)
 	title = tfont.render("MAZE DAZE 2.0",True,BLACK)
+
 	screen.blit(title,(300,325))
 	play = buttons("START",stfont,410,500,200,80,LBLUE,LLBLUE,mpos)
 	instruc = buttons("INSTRUCTIONS",stfont,310,640,420,80,LBLUE,LLBLUE,mpos)
+
 	#button pressed
 	return play,instruc
-
-
 
 def main():
 	print "Hit ESC to end the program."
@@ -186,6 +189,7 @@ def main():
 	window = 0
 	mpos = (0,0)
 	directions = "R"
+
 	global x
 	global y
 
@@ -207,6 +211,7 @@ def main():
 			move(vertical,horizontal,directions)
 		if window == 2:
 			instructions()
+
 	    #deals with any keyboard options once program is run
 	    #looks for the event (action of using keyboard)
 		mpos = pygame.mouse.get_pos()
@@ -226,6 +231,7 @@ def main():
 						inPlay = False  
 	    # get_pressed() method generates a True/False list for the status of all keys
 		elif window == 1:
+
 			directions = ""
 			keys = pygame.key.get_pressed()    
 			if keys[pygame.K_LEFT]:
@@ -243,7 +249,6 @@ def main():
 
 			if keys[pygame.K_ESCAPE]:
 				inPlay = False
-
 
 
 		#updating
