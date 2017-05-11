@@ -126,6 +126,12 @@ def move(vertical,horizontal,directions):
 	pygame.draw.circle(screen,BLACK,(x,y),d,0)
 	pygame.draw.circle(screen,BGREY,(x,y),d-5,0)
 
+# fin_screen()
+# @param: score:int/flt
+# @return: select:bool[menu,restart]
+def fin_screen():
+
+	
 # vline()
 # @param: x:int,y:int,l:int,colour:int()
 # @return: none
