@@ -32,9 +32,11 @@ pressed = False
 mpos = (0,0)
 x = 30
 y = 770
-d = 20
-spdx = 3
-spdy = 3
+d = 25
+spdx = 1
+spdy = 1
+
+
 
 
 
@@ -56,6 +58,74 @@ def buttons(word,font,x,y,w,h,c1,c2,mpos):
 		screen.blit(word,(x+10,y+5))
 	return push
 
+
+# move()
+# @param: vertical:int[], horizontal:int[], directions:str
+# @return: none
+def move(vertical,horizontal,directions):
+	global x
+	global y
+	if x-d-2<0:
+		x = d+2
+	elif x+d+2>WIDTH:
+		x = WIDTH-d-2
+	if y-d-2<0:
+		y = d+2
+	elif y+d+2>HEIGHT:
+		y = HEIGHT-d-2
+
+	if directions == "R":
+		for v in range(len(vertical)):
+			if x+d == vertical[v][0] or x+d == vertical[v][0]+1:
+				if y-d<= vertical[v][1]+vertical[v][2] and y-d >= vertical[v][1]:
+					x = vertical[v][0]-d
+				elif y+d >= vertical[v][1] and y+d <= vertical[v][1]+vertical[v][2]-1:
+					x = vertical[v][0]-d
+		for h in range(len(horizontal)):
+			if x+d == horizontal[h][0] or x+d == horizontal[h][0]+1:
+				if y-d <= horizontal[h][1] and y+d >= horizontal[h][1]:
+					x = horizontal[h][0]-d
+
+	if directions == "L":
+		for v in range(len(vertical)):
+			if  x-d == vertical[v][0] or x-d == vertical[v][0]-1:
+				if y-d<= vertical[v][1]+vertical[v][2] and y-d >= vertical[v][1]:
+					x = vertical[v][0]+d
+				elif y+d >= vertical[v][1] and y+d <= vertical[v][1]+vertical[v][2]:				
+					x = vertical[v][0]+d
+		for h in range(len(horizontal)):
+			if x-d == horizontal[h][0]+horizontal[h][2] or x-d == horizontal[h][0]+horizontal[h][2]-1:
+				if y-d <= horizontal[h][1] and y+d >= horizontal[h][1]:
+					x = horizontal[h][0]+horizontal[h][2]+d
+
+	if directions == "D":
+		for h in range(len(horizontal)):
+			if y+d == horizontal[h][1] or y+d == horizontal[h][1]+1:
+				if x+d >= horizontal[h][0] and x+d <= horizontal[h][0]+horizontal[h][2]:
+					y = horizontal[h][1]-d
+				elif x-d >= horizontal[h][0]+horizontal[h][2] and x-d <= horizontal[h][0]:
+					y = horizontal[h][1]-d
+		for v in range(len(vertical)):
+			if y+d == vertical[v][1] or y+d == vertical[v][1]+1:
+				if x-d <= vertical[v][0] and x+d >= vertical[v][0]:
+					y = vertical[v][1]-d
+
+	if directions == "U":
+		for h in range(len(horizontal)):
+			if y-d == horizontal[h][1] or y-d == horizontal[h][1]-1:
+				if x+d >= horizontal[h][0] and x+d <= horizontal[h][0]+horizontal[h][2]:
+					y = horizontal[h][1]+d
+				elif x-d >= horizontal[h][0]+horizontal[h][2] and x-d <= horizontal[h][0]:
+					y = horizontal[h][1]+d
+		for v in range(len(vertical)):
+			if y-d == vertical[v][1]+vertical[v][2] or y-d == vertical[v][1]+vertical[v][2]-1:
+				print "hillo"
+				if x-d <= vertical[v][0] and x+d >= vertical[v][0]:
+					y = vertical[v][1]+vertical[v][2]+d
+	
+	pygame.draw.circle(screen,BLACK,(x,y),d,0)
+	pygame.draw.circle(screen,BGREY,(x,y),d-5,0)
+
 # vline()
 # @param: x:int,y:int,l:int,colour:int()
 # @return: none
@@ -70,7 +140,7 @@ def hline(x,y,l,colour):
 
 # level_1()
 # @param: none
-# @return: borders:int[]
+# @return: vertical:int[],horizontal:int[]
 def level_1():
 	screen.fill(LLBLUE)
 	pygame.draw.rect(screen,DBLUE,(0,0,WIDTH,HEIGHT),7)
@@ -83,6 +153,7 @@ def level_1():
 	for k in range(11):
 		hline(horizontal[k][0],horizontal[k][1],horizontal[k][2],DBLUE)
 
+	return vertical,horizontal
 
 
 # instructions()
@@ -104,24 +175,43 @@ def title(mpos):
 	screen.blit(background,[0,0])
 	pygame.draw.rect(screen,WHITE,(0,300,1000,100),0)
 	title = tfont.render("MAZE DAZE 2.0",True,BLACK)
-	screen.blit(title,(400,310))
-	play = buttons("START",stfont,400,470,200,80,LBLUE,LLBLUE,mpos)
-	instruc = buttons("INSTRUCTIONS",stfont,300,640,400,80,LBLUE,LLBLUE,mpos)
+
+	screen.blit(title,(300,325))
+	play = buttons("START",stfont,410,500,200,80,LBLUE,LLBLUE,mpos)
+	instruc = buttons("INSTRUCTIONS",stfont,310,640,420,80,LBLUE,LLBLUE,mpos)
+
 	#button pressed
 	return play,instruc
-
-
-
-
 
 def main():
 	print "Hit ESC to end the program."
 	inPlay = True
 	window = 0
+	mpos = (0,0)
+	directions = "R"
+
 	global x
 	global y
 
 	while inPlay == True:
+
+		
+		if window==0:
+			play,instruc = title(mpos)                     # the screen window must be constantly redrawn - animation
+			if play==True:
+				window=1
+				level_1()
+				continue
+			if instruc == True:
+				window = 2
+				instructions()
+				continue
+		if window==1:
+			vertical,horizontal = level_1()
+			move(vertical,horizontal,directions)
+		if window == 2:
+			instructions()
+
 	    #deals with any keyboard options once program is run
 	    #looks for the event (action of using keyboard)
 		mpos = pygame.mouse.get_pos()
@@ -141,46 +231,26 @@ def main():
 						inPlay = False  
 	    # get_pressed() method generates a True/False list for the status of all keys
 		elif window == 1:
+
+			directions = ""
 			keys = pygame.key.get_pressed()    
 			if keys[pygame.K_LEFT]:
-				print "L"
+				directions =  "L"
 				x -= spdx
-			if keys[pygame.K_RIGHT]:
-				print "R"
+			elif keys[pygame.K_RIGHT]:
+				directions =  "R"
 				x += spdx
-			if keys[pygame.K_UP]:
-				print "U"
+			elif keys[pygame.K_UP]:
+				directions = "U"
 				y -= spdy
-			if keys[pygame.K_DOWN]:
-				print "D"
+			elif keys[pygame.K_DOWN]:
+				directions = "D"
 				y += spdy
-			if x<=0:
-				x = 0
-			if (x+d)>=(WIDTH+1):
-				x = WIDTH
-			if y<=0:
-				y = 0
-			if (y+d)>=(HEIGHT+1):
-				y = HEIGHT
+
 			if keys[pygame.K_ESCAPE]:
 				inPlay = False
-			print x
-			print y
 
 
-		if window==0:
-			play,instruc = title(mpos)                     # the screen window must be constantly redrawn - animation
-			if play==True:
-				window=1
-				level_1()
-			if instruc == True:
-				window = 2
-				instructions()
-		if window==1:
-			level_1()
-
-		if window == 2:
-			instructions()
 		#updating
 		pygame.display.update()
 		pygame.event.pump()
