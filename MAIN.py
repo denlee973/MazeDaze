@@ -33,8 +33,8 @@ mpos = (0,0)
 x = 30
 y = 770
 d = 25
-spdx = 2
-spdy = 2
+spdx = 1
+spdy = 1
 
 
 
@@ -71,22 +71,55 @@ def move(vertical,horizontal,directions):
 		y = d+2
 	elif y+d+2>HEIGHT:
 		y = HEIGHT-d-2
-		
-	for v in range(len(vertical)):
-		
-		if directions == "R":
-			if  x+d == vertical[v][0] and (y-d<= vertical[v][1]+vertical[v][2] and y-d >= vertical[v][1]) or (y+d >= vertical[v][1] and y+d <= vertical[v][1]+vertical[v][2]):		#-not running this if statement-
-				x = vertical[v][0]-d
-		elif directions == "L":
-			if  x-d == vertical[v][0]+2 and (y-d<= vertical[v][1]+vertical[v][2] and y-d >= vertical[v][1]) or (y+d >= vertical[v][1] and y+d <= vertical[v][1]+vertical[v][2]):				
-				x = vertical[v][0]+d
-	for h in range(len(horizontal)):
-		if directions == "D":
-			if y+d == horizontal[h][1] and (x+d >= horizontal[h][0] and x+d <= horizontal[h][0]+horizontal[h][2]) or x-d >= horizontal[h][0]+horizontal[h][2] and (x-d <= horizontal[h][0]):
-				y = horizontal[h][1]-d
-		elif directions == "U":
-			if y-d == horizontal[h][1] and (x+d >= horizontal[h][0] and x+d <= horizontal[h][0]+horizontal[h][2]) or x-d >= horizontal[h][0]+horizontal[h][2] and (x-d <= horizontal[h][0]):
-				y = horizontal[h][1]+d
+
+	if directions == "R":
+		for v in range(len(vertical)):
+			if x+d == vertical[v][0] or x+d == vertical[v][0]+1:
+				if y-d<= vertical[v][1]+vertical[v][2] and y-d >= vertical[v][1]:
+					x = vertical[v][0]-d
+				elif y+d >= vertical[v][1] and y+d <= vertical[v][1]+vertical[v][2]-1:
+					x = vertical[v][0]-d
+		for h in range(len(horizontal)):
+			if x+d == horizontal[h][0] or x+d == horizontal[h][0]+1:
+				if y-d <= horizontal[h][1] and y+d >= horizontal[h][1]:
+					x = horizontal[h][0]-d
+
+	if directions == "L":
+		for v in range(len(vertical)):
+			if  x-d == vertical[v][0] or x-d == vertical[v][0]-1:
+				if y-d<= vertical[v][1]+vertical[v][2] and y-d >= vertical[v][1]:
+					x = vertical[v][0]+d
+				elif y+d >= vertical[v][1] and y+d <= vertical[v][1]+vertical[v][2]:				
+					x = vertical[v][0]+d
+		for h in range(len(horizontal)):
+			if x-d == horizontal[h][0]+horizontal[h][2] or x-d == horizontal[h][0]+horizontal[h][2]-1:
+				if y-d <= horizontal[h][1] and y+d >= horizontal[h][1]:
+					x = horizontal[h][0]+horizontal[h][2]+d
+
+	if directions == "D":
+		for h in range(len(horizontal)):
+			if y+d == horizontal[h][1] or y+d == horizontal[h][1]+1:
+				if x+d >= horizontal[h][0] and x+d <= horizontal[h][0]+horizontal[h][2]:
+					y = horizontal[h][1]-d
+				elif x-d >= horizontal[h][0]+horizontal[h][2] and x-d <= horizontal[h][0]:
+					y = horizontal[h][1]-d
+		for v in range(len(vertical)):
+			if y+d == vertical[v][1] or y+d == vertical[v][1]+1:
+				if x-d <= vertical[v][0] and x+d >= vertical[v][0]:
+					y = vertical[v][1]-d
+
+	if directions == "U":
+		for h in range(len(horizontal)):
+			if y-d == horizontal[h][1] or y-d == horizontal[h][1]-1:
+				if x+d >= horizontal[h][0] and x+d <= horizontal[h][0]+horizontal[h][2]:
+					y = horizontal[h][1]+d
+				elif x-d >= horizontal[h][0]+horizontal[h][2] and x-d <= horizontal[h][0]:
+					y = horizontal[h][1]+d
+		for v in range(len(vertical)):
+			if y-d == vertical[v][1]+vertical[v][2] or y-d == vertical[v][1]+vertical[v][2]-1:
+				print "hillo"
+				if x-d <= vertical[v][0] and x+d >= vertical[v][0]:
+					y = vertical[v][1]+vertical[v][2]+d
 	
 	pygame.draw.circle(screen,BLACK,(x,y),d,0)
 	pygame.draw.circle(screen,BGREY,(x,y),d-5,0)
@@ -117,9 +150,8 @@ def level_1():
 	#right to left, top to bottom
 	for k in range(11):
 		hline(horizontal[k][0],horizontal[k][1],horizontal[k][2],DBLUE)
+
 	return vertical,horizontal
-
-
 
 # instructions()
 # @param: none
@@ -146,14 +178,35 @@ def title(mpos):
 	#button pressed
 	return play,instruc
 
+
+
 def main():
 	print "Hit ESC to end the program."
 	inPlay = True
 	window = 0
+	mpos = (0,0)
+	directions = "R"
 	global x
 	global y
 
 	while inPlay == True:
+
+		
+		if window==0:
+			play,instruc = title(mpos)                     # the screen window must be constantly redrawn - animation
+			if play==True:
+				window=1
+				level_1()
+				continue
+			if instruc == True:
+				window = 2
+				instructions()
+				continue
+		if window==1:
+			vertical,horizontal = level_1()
+			move(vertical,horizontal,directions)
+		if window == 2:
+			instructions()
 	    #deals with any keyboard options once program is run
 	    #looks for the event (action of using keyboard)
 		mpos = pygame.mouse.get_pos()
@@ -193,21 +246,6 @@ def main():
 
 
 
-		if window==0:
-			play,instruc = title(mpos)                     # the screen window must be constantly redrawn - animation
-			if play==True:
-				window=1
-				level_1()
-				continue
-			if instruc == True:
-				window = 2
-				instructions()
-				continue
-		if window==1:
-			vertical,horizontal = level_1()
-			move(vertical,horizontal,directions)
-		if window == 2:
-			instructions()
 		#updating
 		pygame.display.update()
 		pygame.event.pump()
