@@ -130,6 +130,11 @@ def move(vertical,horizontal,directions):
 # @param: score:int/flt
 # @return: select:bool[menu,restart]
 def fin_screen():
+	pygame.draw.rect(screen,WHITE,(0,300,1000,100),0)
+	title = tfont.render("FINISH!",True,BLACK)
+	screen.blit(title,(350,325))
+	buttons("PLAY",ssfont,250,650,200,80,LBLUE,LLBLUE,mpos)
+	buttons("MENU",ssfont,550,650,200,80,LBLUE,LLBLUE,mpos)
 
 	
 # vline()
@@ -170,7 +175,7 @@ def instructions():
 	line1 = pfont.render("Welcome to Maze Daze 2.0!",True,BLACK)
 	screen.blit(line1,(300,300))
 	buttons("PLAY",ssfont,250,650,200,80,LBLUE,LLBLUE,mpos)
-	buttons("TITLE",ssfont,550,650,200,80,LBLUE,LLBLUE,mpos)
+	buttons("MENU",ssfont,550,650,200,80,LBLUE,LLBLUE,mpos)
 	#updating
 	pygame.display.update()
 
@@ -181,7 +186,6 @@ def title(mpos):
 	screen.blit(background,[0,0])
 	pygame.draw.rect(screen,WHITE,(0,300,1000,100),0)
 	title = tfont.render("MAZE DAZE 2.0",True,BLACK)
-
 	screen.blit(title,(300,325))
 	play = buttons("START",stfont,410,500,200,80,LBLUE,LLBLUE,mpos)
 	instruc = buttons("INSTRUCTIONS",stfont,310,640,420,80,LBLUE,LLBLUE,mpos)
