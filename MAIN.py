@@ -37,9 +37,6 @@ spdx = 1
 spdy = 1
 
 
-
-
-
 #buttons()
 #@param: word:str,font,x:int,y:int,w:int,h:int,c1:int(),c2:int()
 #@return: pressed:bool
@@ -65,6 +62,8 @@ def buttons(word,font,x,y,w,h,c1,c2,mpos):
 def move(vertical,horizontal,directions):
 	global x
 	global y
+	print x
+	print y
 	if x-d-2<0:
 		x = d+2
 	elif x+d+2>WIDTH:
@@ -119,12 +118,16 @@ def move(vertical,horizontal,directions):
 					y = horizontal[h][1]+d
 		for v in range(len(vertical)):
 			if y-d == vertical[v][1]+vertical[v][2] or y-d == vertical[v][1]+vertical[v][2]-1:
-				print "hillo"
 				if x-d <= vertical[v][0] and x+d >= vertical[v][0]:
 					y = vertical[v][1]+vertical[v][2]+d
 	
 	pygame.draw.circle(screen,BLACK,(x,y),d,0)
 	pygame.draw.circle(screen,BGREY,(x,y),d-5,0)
+	window = 1
+	if x>=969 and y<=30:
+		print "asdfjkl;"
+		window = 3
+	return window
 
 # fin_screen()
 # @param: score:int/flt
@@ -133,9 +136,9 @@ def fin_screen():
 	pygame.draw.rect(screen,WHITE,(0,300,1000,100),0)
 	title = tfont.render("FINISH!",True,BLACK)
 	screen.blit(title,(350,325))
-	buttons("PLAY",ssfont,250,650,200,80,LBLUE,LLBLUE,mpos)
-	buttons("MENU",ssfont,550,650,200,80,LBLUE,LLBLUE,mpos)
-
+	play = buttons("PLAY",ssfont,250,650,200,80,LBLUE,LLBLUE,mpos)
+	menu = buttons("MENU",ssfont,550,650,200,80,LBLUE,LLBLUE,mpos)
+	return play, menu
 	
 # vline()
 # @param: x:int,y:int,l:int,colour:int()
@@ -174,10 +177,9 @@ def instructions():
 	screen.fill(LLBLUE)
 	line1 = pfont.render("Welcome to Maze Daze 2.0!",True,BLACK)
 	screen.blit(line1,(300,300))
-	buttons("PLAY",ssfont,250,650,200,80,LBLUE,LLBLUE,mpos)
-	buttons("MENU",ssfont,550,650,200,80,LBLUE,LLBLUE,mpos)
-	#updating
-	pygame.display.update()
+	play = buttons("PLAY",ssfont,250,650,200,80,LBLUE,LLBLUE,mpos)
+	menu = buttons("MENU",ssfont,550,650,200,80,LBLUE,LLBLUE,mpos)
+	return play, menu
 
 #title()
 #@param: none
@@ -205,7 +207,6 @@ def main():
 
 	while inPlay == True:
 
-		
 		if window==0:
 			play,instruc = title(mpos)                     # the screen window must be constantly redrawn - animation
 			if play==True:
@@ -216,16 +217,34 @@ def main():
 				window = 2
 				instructions()
 				continue
-		if window==1:
+		if window == 1:
 			vertical,horizontal = level_1()
-			move(vertical,horizontal,directions)
+			window = move(vertical,horizontal,directions)
 		if window == 2:
-			instructions()
+			play,menu = instructions()
+			if play == True:
+				window = 1
+				level_1()
+				continue
+			elif menu == True:
+				window = 0
+				title(mpos)
+				continue
+		if window == 3:
+			play,menu = fin_screen()
+			if play == True:
+				window = 1
+				level_1()
+				continue
+			elif menu == True:
+				window = 0
+				title(mpos)
+				continue
 
 	    #deals with any keyboard options once program is run
 	    #looks for the event (action of using keyboard)
 		mpos = pygame.mouse.get_pos()
-		if window == 0 or window == 2:
+		if window == 0 or window == 2 or window == 3:
 			for event in pygame.event.get():
 				if event.type == pygame.MOUSEBUTTONDOWN:
 					print "PRESSED"
