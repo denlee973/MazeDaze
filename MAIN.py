@@ -473,7 +473,7 @@ def main():
 			if keys[pygame.K_ESCAPE]:
 				inPlay = False
 
-		screen.blit(cursor,[mpos[0],mpos[1]])
+		screen.blit(cursor,[mpos[0]-10,mpos[1]])
 		#updating
 		pygame.display.update()
 		pygame.event.pump()
