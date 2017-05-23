@@ -12,7 +12,6 @@ screen=pygame.display.set_mode((WIDTH,HEIGHT))
 pygame.display.set_caption('Maze Daze 2.0')
 
 #Define Colour Values
-BLUE = (0, 0, 255)
 DBLUE = (28,74,175)
 LBLUE = (158,221,255)
 LLBLUE = (235,245,255)
@@ -28,12 +27,13 @@ ssfont = pygame.font.SysFont("Century Gothic",50,False,False)
 pfont = pygame.font.SysFont("//Library//Fonts//Microsoft//MS Gothic.ttf",30,False,False)
 
 #initializing things
-background = pygame.image.load("maxresdefault.jpg")
-spiral = pygame.image.load("spiral_black_transparent.png")
-arrow = pygame.image.load("Arrow-PNG-Image.png")
-flag = pygame.image.load("sport-activities-finish-flag-icon.png")
+background = pygame.image.load("title_background.jpg")
+spiral = pygame.image.load("spiral.png")
+arrow = pygame.image.load("arrow.png")
+flag = pygame.image.load("finish_flag.png")
 fullstar = pygame.image.load("fullstar.png")
 emptystar = pygame.image.load("emptystar.png")
+cursor = pygame.image.load("pointer.png")
 spin = [False,False,False,False]
 pressed = False
 mpos = (0,0)
@@ -46,8 +46,8 @@ spdy = 1
 
 
 #buttons()
-#@param: word:str,font,x:int,y:int,w:int,h:int,c1:int(),c2:int()
-#@return: pressed:bool
+#@param: word:str,font,x:int,y:int,w:int,h:int,c1:int(),c2:int(),mpos:int()
+#@return: push:bool
 def buttons(word,font,x,y,w,h,c1,c2,mpos):
 	pressed = pygame.mouse.get_pressed()
 	push = False
@@ -73,13 +73,12 @@ def buttons(word,font,x,y,w,h,c1,c2,mpos):
 
 
 # move()
-# @param: vertical:int[], horizontal:int[], directions:str
-# @return: none
+# @param: vertical:int[], horizontal:int[], directions:str, form:int
+# @return: window:int,form:int
 def move(vertical,horizontal,directions,form):
 	global x
 	global y
-	#print x
-	#print y
+
 	if x-d-2<0:
 		x = d+2
 	elif x+d+2>WIDTH:
@@ -164,8 +163,8 @@ def move(vertical,horizontal,directions,form):
 
 
 # fin_screen()
-# @param: score:int/flt
-# @return: select:bool[menu,restart]
+# @param: mpos:int(),score:int
+# @return: play:bool,menu:bool
 def fin_screen(mpos,score):
 	screen.fill(WHITE)
 	pygame.draw.rect(screen,WHITE,(0,200,1000,100),0)
@@ -173,24 +172,24 @@ def fin_screen(mpos,score):
 	screen.blit(title,(410,225))
 	
 	if score <= 60:
-		screen.blit(fullstar,[150,370])
-		screen.blit(fullstar,[400,370])
-		screen.blit(fullstar,[650,370])
+		screen.blit(fullstar,[150,350])
+		screen.blit(fullstar,[400,350])
+		screen.blit(fullstar,[650,350])
 	elif score > 60 and score < 100:
-		screen.blit(fullstar,[150,370])
-		screen.blit(fullstar,[400,370])
-		screen.blit(emptystar,[650,370])
+		screen.blit(fullstar,[150,350])
+		screen.blit(fullstar,[400,350])
+		screen.blit(emptystar,[650,350])
 	elif score >= 100 and score <=150:
-		screen.blit(fullstar,[150,370])
-		screen.blit(emptystar,[400,370])
-		screen.blit(emptystar,[650,370])
+		screen.blit(fullstar,[150,350])
+		screen.blit(emptystar,[400,30])
+		screen.blit(emptystar,[650,350])
 	else:
-		screen.blit(emptystar,[150,370])
-		screen.blit(emptystar,[400,370])
-		screen.blit(emptystar,[650,370])
+		screen.blit(emptystar,[150,350])
+		screen.blit(emptystar,[400,350])
+		screen.blit(emptystar,[650,350])
 
-	play = buttons("PLAY AGAIN",ssfont,240,650,230,50,LBLUE,LLBLUE,mpos)
-	menu = buttons("MENU",ssfont,600,650,115,50,LBLUE,LLBLUE,mpos)
+	play = buttons("PLAY AGAIN",ssfont,250,570,230,50,LBLUE,LLBLUE,mpos)
+	menu = buttons("MENU",ssfont,600,570,115,50,LBLUE,LLBLUE,mpos)
 	return play, menu
 	
 # vline()
@@ -237,65 +236,77 @@ def level_1():
 
 
 # instructions()
-# @param: none
-# @return: none
+# @param: rules:bool,controls:bool,mpos:int()
+# @return: play:bool,menu:bool,page:bool
 def instructions(rules,controls,mpos):
 	screen.fill(LLBLUE)
 	a = False
 	b = False
 	if rules == True:
-		print "hi"
 		a = True
 		b = False
 
 	if controls == True:
-		print "YO"
 		a = False
 		b = True
 
 	if a == True:
-		text = ["It's a race to the end of the maze!","Along the way, you'll have to deal", "with some dizzy spinners.","Which way is up?"]
+		text = ["It's a race to the end of the maze!","Along the way, you'll have to deal with some", "dizzy spinners. Try to get there","by pressing as little buttons as possible.","Which way is up?"]
 		tbblit = []
-		for t in range(4):
-			line = stfont.render(text[t],True,BLACK)
+		for t in range(5):
+			line = ssfont.render(text[t],True,BLACK)
 			tbblit.append(line)
 		for l in range(len(tbblit)):
-			screen.blit(tbblit[l],(130,290+(l*70+15)))
+			screen.blit(tbblit[l],(130,290+(l*50+15)))
+		buttons("RULES",stfont,130,200,200,70,LBLUE,LLBLUE,mpos)
+		page = buttons("CONTROLS",stfont,500,200,320,70,LBLUE,LLBLUE,mpos)
 	if b == True:
-		print "YOOOOO"
-
+		pygame.draw.circle(screen,BLACK,(520,475),d,0)
+		pygame.draw.circle(screen,BGREY,(520,475),d-5,0)
+		screen.blit(arrow,[380,450])
+		screen.blit(flag,[500,525])
+		screen.blit(arrow,[380,525])
 		screen.blit(spiral,[500,600])
 		screen.blit(arrow,[380,600])
-		label = ssfont.render("Dizzy Spinner",True,BLACK)
-		screen.blit(label,(130,600))
-		word1 = stfont.render("Control your circle with arrows",True,BLACK)
-		word2 = stfont.render("or WASD.",True,BLACK)
+		labels = ["You","Finish","Dizzy Spinner"]
+		nlabels = []
+		for i in range (len(labels)):
+			label = ssfont.render(labels[i],True,BLACK)
+			nlabels.append(label)
+		screen.blit(nlabels[0],(300,450))
+		screen.blit(nlabels[1],(250,525))
+		screen.blit(nlabels[2],(130,600))
+		word1 = stfont.render("Control your circle with your",True,BLACK)
+		word2 = stfont.render("arrow keys.",True,BLACK)
 		screen.blit(word1,(130,290))
 		screen.blit(word2,(130,290+85))
+		page = buttons("RULES",stfont,130,200,200,70,LBLUE,LLBLUE,mpos)
+		buttons("CONTROLS",stfont,500,200,320,70,LBLUE,LLBLUE,mpos)
 		
-	print controls
+
 	play = buttons("PLAY",stfont,760,580,160,70,LBLUE,LLBLUE,mpos)
-	rules = buttons("RULES",stfont,130,200,200,70,LBLUE,LLBLUE,mpos)
-	controls = buttons("CONTROLS",stfont,500,200,320,70,LBLUE,LLBLUE,mpos)
+
 	menu = False
-	return play, menu
+	return play, menu,page
 
 #title()
-#@param: none
-#@return: none
+#@param: mpos:int()
+#@return: play:bool,instruc:bool,end:bool
 def title(mpos):
 	screen.blit(background,[0,0])
 	pygame.draw.rect(screen,WHITE,(0,300,1000,100),0)
 	title = tfont.render("MAZE DAZE 2.0",True,BLACK)
 	screen.blit(title,(300,325))
 	play = buttons("START",stfont,410,500,200,70,LBLUE,LLBLUE,mpos)
-	instruc = buttons("INSTRUCTIONS",stfont,300,640,420,70,LBLUE,LLBLUE,mpos)
+	instruc = buttons("INSTRUCTIONS",stfont,300,650,420,70,LBLUE,LLBLUE,mpos)
 	end = buttons("QUIT",ssfont,880,740,105,45,LBLUE,LLBLUE,mpos)
 
 	#button pressed
 	return play,instruc,end
 
-
+# main()
+# @param: none
+# @return: none
 def main():
 	print "Hit ESC to end the program."
 	inPlay = True
@@ -311,6 +322,7 @@ def main():
 
 		if window==0:
 			play,instruc,end = title(mpos)             # the screen window must be constantly redrawn - animation
+			
 			if play == True:
 				x = 30
 				y = 770
@@ -323,7 +335,7 @@ def main():
 				window = 2
 				rules = True
 				controls = False
-				play,menu = instructions(rules,controls,mpos)
+				play,menu,page = instructions(rules,controls,mpos)
 				continue
 			if end == True:
 				inPlay = False
@@ -332,7 +344,26 @@ def main():
 			vertical,horizontal = level_1()
 			window,form = move(vertical,horizontal,directions,form)
 		if window == 2:
-			play,menu = instructions(rules,controls,mpos)
+			rules = True
+			controls = False
+			play,menu,page = instructions(rules,controls,mpos)
+			if page == True:
+				window = 4
+			if play == True:
+				x = 30
+				y = 770
+				form = 1
+				score = 0
+				window = 1
+
+			elif menu == True:
+				window = 0
+		if window == 4:
+			rules = False
+			controls = True
+			play,menu,page = instructions(rules,controls,mpos)
+			if page == True:
+				window = 2
 			if play == True:
 				x = 30
 				y = 770
@@ -366,12 +397,8 @@ def main():
 		if window == 0 or window == 2 or window == 3:
 			for event in pygame.event.get():
 				if event.type == pygame.MOUSEBUTTONDOWN:
-					print "PRESSED"
 					pressed = True
-				if event.type == pygame.MOUSEMOTION:
-					print "Mouse position:",mpos
 				if event.type == pygame.MOUSEBUTTONUP:
-					print "RELEASED"
 					pressed = False
 		    #looks for escape to be pressed
 				if event.type == pygame.KEYDOWN:
@@ -441,12 +468,12 @@ def main():
 			for event in pygame.event.get():
 				if event.type == pygame.KEYDOWN:
 					score +=1
-					print score
+					print "Score =",score
 			
 			if keys[pygame.K_ESCAPE]:
 				inPlay = False
 
-
+		screen.blit(cursor,[mpos[0],mpos[1]])
 		#updating
 		pygame.display.update()
 		pygame.event.pump()
