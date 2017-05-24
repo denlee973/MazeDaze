@@ -27,6 +27,7 @@ ssfont = pygame.font.SysFont("Century Gothic",50,False,False)
 pfont = pygame.font.SysFont("//Library//Fonts//Microsoft//MS Gothic.ttf",30,False,False)
 
 #initializing things
+#load images
 background = pygame.image.load("title_background.jpg")
 spiral = pygame.image.load("spiral.png")
 arrow = pygame.image.load("arrow.png")
@@ -34,10 +35,14 @@ flag = pygame.image.load("finish_flag.png")
 fullstar = pygame.image.load("fullstar.png")
 emptystar = pygame.image.load("emptystar.png")
 cursor = pygame.image.load("pointer.png")
+#keeps track of which dizzy spinners you have passed
+#so you don't spin multiple times on one spinner
 spin = [False,False,False,False]
 pressed = False
+#mouse position
 mpos = (0,0)
 
+#circle dimensions
 x = 30
 y = 770
 d = 20
@@ -49,8 +54,10 @@ spdy = 1
 #@param: word:str,font,x:int,y:int,w:int,h:int,c1:int(),c2:int(),mpos:int()
 #@return: push:bool
 def buttons(word,font,x,y,w,h,c1,c2,mpos):
+	#gets mouse press
 	pressed = pygame.mouse.get_pressed()
 	push = False
+	#draw button
 	pygame.draw.rect(screen,c1,(x,y,w,h),0)
 	pygame.draw.circle(screen,c1,(x,y),10,0)
 	pygame.draw.circle(screen,c1,(x+w,y),10,0)
@@ -60,10 +67,13 @@ def buttons(word,font,x,y,w,h,c1,c2,mpos):
 	pygame.draw.rect(screen,c1,(x-10,y,10,h),0)
 	pygame.draw.rect(screen,c1,(x,y+h,w,10),0)
 	pygame.draw.rect(screen,c1,(x+w,y,10,h),0)
+	#lights up button when rolled over
 	if mpos[0]>=x and mpos[0]<=x+w and mpos[1]>=y and mpos[1]<=y+h:
 		pygame.draw.rect(screen,c2,(x,y,w,h),0)
+		#if button is pushed
 		if pressed[0] == 1:
 			push = True
+	#print word on top
 	word = font.render(word,True,BLACK)
 	if font == stfont:
 		screen.blit(word,(x+20,y+15))
@@ -79,6 +89,7 @@ def move(vertical,horizontal,directions,form):
 	global x
 	global y
 
+	#screen boundaries
 	if x-d-2<0:
 		x = d+2
 	elif x+d+2>WIDTH:
@@ -88,18 +99,25 @@ def move(vertical,horizontal,directions,form):
 	elif y+d+2>HEIGHT:
 		y = HEIGHT-d-2
 
+	#boundaries moving right
 	if directions == "R":
+		#for vertical lines,
 		for v in range(len(vertical)):
+			#if the right side of the circle is 'touching' a line
 			if x+d == vertical[v][0] or x+d == vertical[v][0]+1:
+				#if there is a line in that y range
 				if y-d<= vertical[v][1]+vertical[v][2] and y-d >= vertical[v][1]:
 					x = vertical[v][0]-d
 				elif y+d >= vertical[v][1] and y+d <= vertical[v][1]+vertical[v][2]-1:
 					x = vertical[v][0]-d
+		#for horizontal lines,
 		for h in range(len(horizontal)):
+			#if it hits a horizontal line's short side
 			if x+d == horizontal[h][0] or x+d == horizontal[h][0]+1:
 				if y-d <= horizontal[h][1] and y+d >= horizontal[h][1]:
 					x = horizontal[h][0]-d
-
+	
+	#boundaries moving left
 	if directions == "L":
 		for v in range(len(vertical)):
 			if  x-d == vertical[v][0] or x-d == vertical[v][0]-1:
@@ -112,6 +130,7 @@ def move(vertical,horizontal,directions,form):
 				if y-d <= horizontal[h][1] and y+d >= horizontal[h][1]:
 					x = horizontal[h][0]+horizontal[h][2]+d
 
+	#boundaries moving down
 	if directions == "D":
 		for h in range(len(horizontal)):
 			if y+d == horizontal[h][1] or y+d == horizontal[h][1]+1:
@@ -124,6 +143,7 @@ def move(vertical,horizontal,directions,form):
 				if x-d <= vertical[v][0] and x+d >= vertical[v][0]:
 					y = vertical[v][1]-d
 
+	#boundaries moving up
 	if directions == "U":
 		for h in range(len(horizontal)):
 			if y-d == horizontal[h][1] or y-d == horizontal[h][1]-1 or y-d == horizontal[h][1]+1:
@@ -140,10 +160,14 @@ def move(vertical,horizontal,directions,form):
 	pygame.draw.circle(screen,BGREY,(x,y),d-5,0)
 
 	window = 1
+	#if you get to the finish then run endscreen
 	if x>=969 and y<=30:
 		window = 3
+	#if you have yet to go through the first spinner
 	if spin[0] == False:
+		#if you go through the spinner
 		if x>=255 and x<=315 and y>=205 and y<=265:
+			#random rotation value
 			form = random.randint(1,4)
 			spin[0] = True
 	if spin[1] == False:
@@ -171,6 +195,7 @@ def fin_screen(mpos,score):
 	title = tfont.render("FINISH!",True,BLACK)
 	screen.blit(title,(410,225))
 	
+	#scoring: based on number of times you press they key down
 	if score <= 60:
 		screen.blit(fullstar,[150,350])
 		screen.blit(fullstar,[400,350])
@@ -188,6 +213,7 @@ def fin_screen(mpos,score):
 		screen.blit(emptystar,[400,350])
 		screen.blit(emptystar,[650,350])
 
+	#buttons
 	play = buttons("PLAY AGAIN",ssfont,250,570,230,50,LBLUE,LLBLUE,mpos)
 	menu = buttons("MENU",ssfont,600,570,115,50,LBLUE,LLBLUE,mpos)
 	return play, menu
@@ -196,6 +222,7 @@ def fin_screen(mpos,score):
 # @param: x:int,y:int,l:int,colour:int()
 # @return: none
 def vline(x,y,l,colour):
+	#draw a vertical line (rectangle) with width 2
 	pygame.draw.rect(screen,colour,(x,y,2,l),0)
 
 		
@@ -203,6 +230,7 @@ def vline(x,y,l,colour):
 # @param:x:int,y:int,l:int,colour:int()
 # @return:none
 def hline(x,y,l,colour):
+	#horizontal line with height 2
 	pygame.draw.rect(screen,colour,(x,y,l,2),0)
 
 # level_1()
@@ -212,13 +240,15 @@ def level_1():
 	screen.fill(LLBLUE)
 	pygame.draw.rect(screen,DBLUE,(0,0,WIDTH,HEIGHT),7)
 
+	#print finish lag
 	screen.blit(flag,[947,15])
-
+	#print dizzy spinners
 	screen.blit(spiral,[260,210])
 	screen.blit(spiral,[515,485])
 	screen.blit(spiral,[640,220])
 	screen.blit(spiral,[890,350])
 
+	#line coordinates
 	#right to left, top to bottom
 	vertical = [[944,0,201],[944,335,67],[944,603,201],[881,67,286],[881,402,134],[818,134,268],[818,469,134],[755,67,67],[755,202,268],[755,536,268],[692,134,134],[692,335,67],[692,469,201],[629,0,67],[629,268,268],[629,670,67],[566,67,201],[566,335,67],[566,536,67],[566,737,67],[503,67,67],[503,469,67],[503,603,201],[440,134,201],[440,670,67],[377,67,67],[377,335,134],[377,536,67],[377,737,67],[314,134,67],[314,469,201],[251,0,134],[251,402,134],[251,603,134],[188,0,67],[188,134,67],[188,268,134],[188,536,268],[125,67,67],[125,201,67],[125,536,67],[125,670,67],[62,134,67],[62,268,67],[62,469,201]]
 	#left to right, top to bottom	
@@ -240,27 +270,23 @@ def level_1():
 # @return: play:bool,menu:bool,page:bool
 def instructions(rules,controls,mpos):
 	screen.fill(LLBLUE)
-	a = False
-	b = False
+	#rules screen
 	if rules == True:
-		a = True
-		b = False
-
-	if controls == True:
-		a = False
-		b = True
-
-	if a == True:
+		#printing multiple lines of text
 		text = ["It's a race to the end of the maze!","Along the way, you'll have to deal with some", "dizzy spinners. Try to get there","by pressing as little buttons as possible.","Which way is up?"]
 		tbblit = []
+		#render loop
 		for t in range(5):
 			line = ssfont.render(text[t],True,BLACK)
 			tbblit.append(line)
+		#blit loop
 		for l in range(len(tbblit)):
 			screen.blit(tbblit[l],(130,290+(l*50+15)))
-		buttons("RULES",stfont,130,200,200,70,LBLUE,LLBLUE,mpos)
+		buttons("RULES",stfont,130,200,200,70,LBLUE,LBLUE,mpos)
 		page = buttons("CONTROLS",stfont,500,200,320,70,LBLUE,LLBLUE,mpos)
-	if b == True:
+	#controls screen
+	if controls == True:
+		#images
 		pygame.draw.circle(screen,BLACK,(520,475),d,0)
 		pygame.draw.circle(screen,BGREY,(520,475),d-5,0)
 		screen.blit(arrow,[380,450])
@@ -268,6 +294,8 @@ def instructions(rules,controls,mpos):
 		screen.blit(arrow,[380,525])
 		screen.blit(spiral,[500,600])
 		screen.blit(arrow,[380,600])
+		
+		#rendering multiple lines
 		labels = ["You","Finish","Dizzy Spinner"]
 		nlabels = []
 		for i in range (len(labels)):
@@ -281,12 +309,12 @@ def instructions(rules,controls,mpos):
 		screen.blit(word1,(130,290))
 		screen.blit(word2,(130,290+85))
 		page = buttons("RULES",stfont,130,200,200,70,LBLUE,LLBLUE,mpos)
-		buttons("CONTROLS",stfont,500,200,320,70,LBLUE,LLBLUE,mpos)
+		buttons("CONTROLS",stfont,500,200,320,70,LBLUE,LBLUE,mpos)
 		
 
-	play = buttons("PLAY",stfont,760,580,160,70,LBLUE,LLBLUE,mpos)
+	play = buttons("PLAY",stfont,760,650,160,70,LBLUE,LLBLUE,mpos)
 
-	menu = False
+	menu = buttons("MENU",stfont,750,540,180,70,LBLUE,LLBLUE,mpos)
 	return play, menu,page
 
 #title()
@@ -319,10 +347,11 @@ def main():
 	global y
 
 	while inPlay == True:
-
+		#window0 --> title screen
 		if window==0:
 			play,instruc,end = title(mpos)             # the screen window must be constantly redrawn - animation
 			
+			#start game
 			if play == True:
 				x = 30
 				y = 770
@@ -331,18 +360,22 @@ def main():
 				window = 1
 				vertical,horiontal = level_1()
 				continue
+			#show instructions
 			if instruc == True:
 				window = 2
 				rules = True
 				controls = False
 				play,menu,page = instructions(rules,controls,mpos)
 				continue
+			#quit button
 			if end == True:
 				inPlay = False
 				break
+		#window1 --> game
 		if window == 1:
 			vertical,horizontal = level_1()
 			window,form = move(vertical,horizontal,directions,form)
+		#window2 --> instructions-rules
 		if window == 2:
 			rules = True
 			controls = False
@@ -358,6 +391,7 @@ def main():
 
 			elif menu == True:
 				window = 0
+		#window4 --> instructions-controls
 		if window == 4:
 			rules = False
 			controls = True
@@ -374,7 +408,7 @@ def main():
 			elif menu == True:
 				window = 0
 
-
+		#window3 --> end screen
 		if window == 3:
 			play,menu = fin_screen(mpos,score)
 			if play == True:
@@ -408,7 +442,8 @@ def main():
 		elif window == 1:
 
 			directions = ""
-			keys = pygame.key.get_pressed()    
+			keys = pygame.key.get_pressed()
+			#no direction rotation    
 			if form == 1:
 				if keys[pygame.K_LEFT] or keys[pygame.K_w]:
 					directions =  "L"
@@ -423,6 +458,7 @@ def main():
 					directions = "D"
 					y += spdy
 
+			#1 direction rotation to the left
 			elif form == 2:
 				if keys[pygame.K_LEFT]:
 					directions =  "U"
@@ -437,6 +473,7 @@ def main():
 					directions = "L"
 					x -= spdy
 
+			#2 direction rotations
 			elif form == 3:
 				if keys[pygame.K_LEFT]:
 					directions =  "R"
@@ -450,7 +487,8 @@ def main():
 				elif keys[pygame.K_DOWN]:
 					directions = "U"
 					y -= spdy
-
+		
+			#3 direction rotations to the left
 			elif form == 4:
 				if keys[pygame.K_LEFT]:
 					directions =  "D"
@@ -465,14 +503,17 @@ def main():
 					directions = "R"
 					x += spdy
 
+			#score counter
 			for event in pygame.event.get():
 				if event.type == pygame.KEYDOWN:
 					score +=1
 					print "Score =",score
 			
+			#escape quit
 			if keys[pygame.K_ESCAPE]:
 				inPlay = False
 
+		#fancy cursor
 		screen.blit(cursor,[mpos[0]-10,mpos[1]])
 		#updating
 		pygame.display.update()
