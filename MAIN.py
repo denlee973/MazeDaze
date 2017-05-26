@@ -1,31 +1,3 @@
-MAIN.py
-DETAILS
-ACTIVITY
-Sharing Info
-
-D
-General Info
-Type
-Text
-Size
-15 KB (15,681 bytes)
-Storage used
-0 bytesOwned by someone else
-Location
-FinalProject_Lee_Denise
-Owner
-Denise Lee
-Modified
-9:58 PM by Denise Lee
-Opened
-9:59 PM by me
-Created
-9:58 PM
-Description
-Add a description
-Download permissions
-Viewers can download
-
 import pygame, sys
 from pygame.locals import *
 import random
