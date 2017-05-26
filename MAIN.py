@@ -20,6 +20,10 @@ BLACK = (0,0,0)
 BGREY = (78,117,130)
 LGREY = (240,240,240)
 
+#music
+pygame.mixer.music.load("soundtrack.mp3")
+pygame.mixer.music.play(-1,0.0)
+
 #fonts
 tfont = pygame.font.SysFont("Century Gothic",80,False,False)	#doesn't actually use century gothic
 stfont = pygame.font.SysFont("Century Gothic",70,False,False)
