@@ -1,3 +1,31 @@
+MAIN.py
+DETAILS
+ACTIVITY
+Sharing Info
+
+D
+General Info
+Type
+Text
+Size
+15 KB (15,681 bytes)
+Storage used
+0 bytesOwned by someone else
+Location
+FinalProject_Lee_Denise
+Owner
+Denise Lee
+Modified
+9:58 PM by Denise Lee
+Opened
+9:59 PM by me
+Created
+9:58 PM
+Description
+Add a description
+Download permissions
+Viewers can download
+
 import pygame, sys
 from pygame.locals import *
 import random
@@ -190,6 +218,7 @@ def move(vertical,horizontal,directions,form):
 # @param: mpos:int(),score:int
 # @return: play:bool,menu:bool
 def fin_screen(mpos,score):
+	print "CONGRATULATIONS!"
 	screen.fill(WHITE)
 	pygame.draw.rect(screen,WHITE,(0,200,1000,100),0)
 	title = tfont.render("FINISH!",True,BLACK)
@@ -197,21 +226,21 @@ def fin_screen(mpos,score):
 	
 	#scoring: based on number of times you press they key down
 	if score <= 60:
-		screen.blit(fullstar,[150,350])
-		screen.blit(fullstar,[400,350])
-		screen.blit(fullstar,[650,350])
+		screen.blit(fullstar,[150,300])
+		screen.blit(fullstar,[400,300])
+		screen.blit(fullstar,[650,300])
 	elif score > 60 and score < 100:
-		screen.blit(fullstar,[150,350])
-		screen.blit(fullstar,[400,350])
-		screen.blit(emptystar,[650,350])
+		screen.blit(fullstar,[150,300])
+		screen.blit(fullstar,[400,300])
+		screen.blit(emptystar,[650,300])
 	elif score >= 100 and score <=150:
-		screen.blit(fullstar,[150,350])
-		screen.blit(emptystar,[400,30])
-		screen.blit(emptystar,[650,350])
+		screen.blit(fullstar,[150,300])
+		screen.blit(emptystar,[400,300])
+		screen.blit(emptystar,[650,300])
 	else:
-		screen.blit(emptystar,[150,350])
-		screen.blit(emptystar,[400,350])
-		screen.blit(emptystar,[650,350])
+		screen.blit(emptystar,[150,300])
+		screen.blit(emptystar,[400,300])
+		screen.blit(emptystar,[650,300])
 
 	#buttons
 	play = buttons("PLAY AGAIN",ssfont,250,570,230,50,LBLUE,LLBLUE,mpos)
@@ -282,7 +311,7 @@ def instructions(rules,controls,mpos):
 		#blit loop
 		for l in range(len(tbblit)):
 			screen.blit(tbblit[l],(130,290+(l*50+15)))
-		buttons("RULES",stfont,130,200,200,70,LBLUE,LBLUE,mpos)
+		buttons("RULES",stfont,130,200,200,70,LLBLUE,LLBLUE,mpos)
 		page = buttons("CONTROLS",stfont,500,200,320,70,LBLUE,LLBLUE,mpos)
 	#controls screen
 	if controls == True:
@@ -309,7 +338,7 @@ def instructions(rules,controls,mpos):
 		screen.blit(word1,(130,290))
 		screen.blit(word2,(130,290+85))
 		page = buttons("RULES",stfont,130,200,200,70,LBLUE,LLBLUE,mpos)
-		buttons("CONTROLS",stfont,500,200,320,70,LBLUE,LBLUE,mpos)
+		buttons("CONTROLS",stfont,500,200,320,70,LLBLUE,LLBLUE,mpos)
 		
 
 	play = buttons("PLAY",stfont,760,650,160,70,LBLUE,LLBLUE,mpos)
